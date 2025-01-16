@@ -212,7 +212,7 @@ animations = [{
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_bj30b"]
-radius = 4.0
+radius = 4.75
 height = 16.0
 
 [node name="Player" type="CharacterBody2D"]
@@ -222,7 +222,8 @@ script = ExtResource("1_qlg0r")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_md1ol")
-animation = &"Idle"
+animation = &"Fall"
+autoplay = "Idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-1, 4)
