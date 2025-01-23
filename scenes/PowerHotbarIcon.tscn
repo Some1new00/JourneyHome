@@ -1,0 +1,30 @@
+[gd_scene load_steps=3 format=3 uid="uid://bfg3pc8rbebpg"]
+
+[ext_resource type="Script" uid="uid://csu3hny2osnel" path="res://scripts/power_hotbar_icon.gd" id="1_w77sd"]
+[ext_resource type="Texture2D" uid="uid://b4y2qhcp5kwxx" path="res://assets/Pxiel Art UI borders.png" id="2_e57rf"]
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" node_paths=PackedStringArray("abilityIcon")]
+script = ExtResource("1_w77sd")
+abilityIcon = NodePath("NinePatchRect/AbilityIcon")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("2_e57rf")
+region_rect = Rect2(15, 15, 99, 98)
+patch_margin_left = 11
+patch_margin_top = 16
+patch_margin_right = 12
+patch_margin_bottom = 16
+
+[node name="AbilityIcon" type="TextureRect" parent="NinePatchRect"]
+unique_name_in_owner = true
+layout_mode = 2
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 48.0
+offset_bottom = 48.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 2
