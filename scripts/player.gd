@@ -9,7 +9,15 @@ var player_death = 0
 const JUMP_VELOCITY = -440.0
 var can_doublejump = false  
 var possible_todoublejump = false
+var is_attacking = false
+var possibletostartFireball = false
 @onready var attack: AnimatedSprite2D = $attack
+@onready var collision_shape: CollisionShape2D = $attack/Hurtbox/CollisionShape2D
+@onready var hurtbox: Area2D = $attack/Hurtbox
+@onready var enemy: Enemy = $"../Enemy"
+@onready var marker_2d: Marker2D = $attack/Hurtbox/CollisionShape2D/Marker2D
+
+@onready var fireball = preload("res://scenes/fireball.tscn")
 
 #func _ready() -> void:
 	#Globals.KittenPickup.connect(CheckPickup)
@@ -18,11 +26,25 @@ var possible_todoublejump = false
 	#match KittenData.catColor:
 		#catColor.WHITE:
 			
+func startFireball() -> void:
+	if possibletostartFireball == true:
+		var fire = fireball.instantiate()
+		fire.global_position = marker_2d.global_position
+		#fire.firing(velocity.x)
+		owner.add_child(fire)
+		
+		await get_tree().create_timer(1).timeout
+		startFireball()
 		
 func startAttack() -> void:
-	print("start attack")
 	$attack.visible = true
 	$attack.play("attack")
+	is_attacking = true
+	
+func _on_hurtbox_area_entered(area: Area2D) -> void:
+	if enemy and is_attacking:
+		enemy.killedThem()
+		
 func handle_danger() -> void:
 	#visible = false
 	print("Player Died!")	
@@ -54,11 +76,13 @@ func game_over():
 	
 func turn():
 	if velocity.x < 0:
-		attack.flip_h = true
+		attack.scale.x = -.5
 		player_sprite.flip_h = true
+	
 	if velocity.x > 0:
-		attack.flip_h = false
+		attack.scale.x = .5
 		player_sprite.flip_h = false
+	
 
 func _physics_process(delta) -> void:
 	velocity.x = move_toward(velocity.x, 0, SPEED)

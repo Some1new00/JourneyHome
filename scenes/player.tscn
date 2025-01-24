@@ -1,4 +1,4 @@
-[gd_scene load_steps=102 format=3 uid="uid://4fae4ve35fwy"]
+[gd_scene load_steps=103 format=3 uid="uid://4fae4ve35fwy"]
 
 [ext_resource type="Script" uid="uid://c3evhnobc5eoq" path="res://scripts/player.gd" id="1_qlg0r"]
 [ext_resource type="Texture2D" uid="uid://eqhl7u8nmnaa" path="res://assets/Cat/Outlined_4_Cat_Fall-Sheet.png" id="2_qlg0r"]
@@ -681,7 +681,10 @@ animations = [{
 "speed": 12.0
 }]
 
-[node name="Player" type="CharacterBody2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_d2wvv"]
+size = Vector2(67, 57)
+
+[node name="Player" type="CharacterBody2D" groups=["Player"]]
 scale = Vector2(2, 2)
 collision_mask = 2
 script = ExtResource("1_qlg0r")
@@ -701,4 +704,20 @@ position = Vector2(0, -9.5)
 scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFrames_2a33p")
 animation = &"attack"
-frame_progress = 0.774914
+frame = 7
+frame_progress = 0.0816045
+
+[node name="Hurtbox" type="Area2D" parent="attack"]
+self_modulate = Color(0.103744, 0.103744, 0.103744, 1)
+collision_mask = 16
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="attack/Hurtbox"]
+self_modulate = Color(0.00351917, 0.00351917, 0.00351917, 1)
+position = Vector2(23, -9)
+shape = SubResource("RectangleShape2D_d2wvv")
+
+[node name="Marker2D" type="Marker2D" parent="attack/Hurtbox/CollisionShape2D"]
+position = Vector2(-23, 9)
+scale = Vector2(2, 2)
+
+[connection signal="area_entered" from="attack/Hurtbox" to="." method="_on_hurtbox_area_entered"]

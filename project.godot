@@ -30,6 +30,7 @@ window/stretch/mode="canvas_items"
 Kittens=""
 Player=""
 Enemies=""
+Fireball=""
 
 [input]
 
@@ -71,6 +72,7 @@ Right={
 2d_physics/layer_4="Items"
 2d_physics/layer_5="Enemies"
 2d_physics/layer_6="Deathzone"
+2d_physics/layer_7="Fireballs"
 
 [physics]
 
