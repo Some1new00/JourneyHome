@@ -3,6 +3,7 @@ extends CharacterBody2D
 @onready var stage_start: Node2D = $"../StageStart"
 
 @onready var player_sprite: AnimatedSprite2D = $AnimatedSprite2D
+var facing_right = true
 var can_control : bool = true
 const SPEED = 350
 var player_death = 0
@@ -16,8 +17,7 @@ var possibletostartFireball = false
 @onready var hurtbox: Area2D = $attack/Hurtbox
 @onready var enemy: Enemy = $"../Enemy"
 @onready var marker_2d: Marker2D = $attack/Hurtbox/CollisionShape2D/Marker2D
-
-@onready var fireball = preload("res://scenes/fireball.tscn")
+@onready var fireball_tscn = preload("res://scenes/fireball.tscn")
 
 #func _ready() -> void:
 	#Globals.KittenPickup.connect(CheckPickup)
@@ -28,13 +28,14 @@ var possibletostartFireball = false
 			
 func startFireball() -> void:
 	if possibletostartFireball == true:
-		var fire = fireball.instantiate()
+		var fire = fireball_tscn.instantiate()
 		fire.global_position = marker_2d.global_position
 		#fire.firing(velocity.x)
 		owner.add_child(fire)
-		
+		fire.firing()
 		await get_tree().create_timer(1).timeout
 		startFireball()
+		
 		
 func startAttack() -> void:
 	$attack.visible = true
@@ -78,11 +79,12 @@ func turn():
 	if velocity.x < 0:
 		attack.scale.x = -.5
 		player_sprite.flip_h = true
-	
+		facing_right = false
+		
 	if velocity.x > 0:
 		attack.scale.x = .5
 		player_sprite.flip_h = false
-	
+		facing_right = true
 
 func _physics_process(delta) -> void:
 	velocity.x = move_toward(velocity.x, 0, SPEED)
