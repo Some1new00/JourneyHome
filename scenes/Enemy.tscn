@@ -1,11 +1,18 @@
-[gd_scene load_steps=17 format=3 uid="uid://dutwcqyj7183v"]
+[gd_scene load_steps=26 format=3 uid="uid://dutwcqyj7183v"]
 
 [ext_resource type="Texture2D" uid="uid://bu4qust617leu" path="res://assets/Enemies/Carrot-sheet.png" id="1_3gvst"]
 [ext_resource type="Script" uid="uid://weawvfnakxs5" path="res://scripts/enemy.gd" id="1_55jtl"]
+[ext_resource type="Texture2D" uid="uid://clbg1ukl4dn3m" path="res://assets/Carrot/Death/Death1.png" id="2_82o86"]
+[ext_resource type="Texture2D" uid="uid://6u847rgnj6ca" path="res://assets/Carrot/Death/Death2.png" id="3_1gqeq"]
+[ext_resource type="Texture2D" uid="uid://dfud3kvcrwd60" path="res://assets/Carrot/Death/Death3.png" id="4_isvm2"]
+[ext_resource type="Texture2D" uid="uid://bjf1ydhg7j7he" path="res://assets/Carrot/Death/Death4.png" id="5_gr8dl"]
+[ext_resource type="Texture2D" uid="uid://dokfxxqwawwp5" path="res://assets/Carrot/Death/Death5.png" id="6_axa8o"]
+[ext_resource type="Texture2D" uid="uid://ueilg2qnp1w6" path="res://assets/Carrot/Death/Death6.png" id="7_4iqch"]
+[ext_resource type="Texture2D" uid="uid://d21bdemd45w10" path="res://assets/Carrot/Death/Death7.png" id="8_x3f71"]
+[ext_resource type="Texture2D" uid="uid://c04lnkdsf3cnb" path="res://assets/Carrot/Death/Death8.png" id="9_ksmwx"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3gvst"]
-radius = 3.0
-height = 12.0
+[sub_resource type="CircleShape2D" id="CircleShape2D_55jtl"]
+radius = 2.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_55jtl"]
 atlas = ExtResource("1_3gvst")
@@ -59,6 +66,35 @@ region = Rect2(384, 64, 64, 64)
 animations = [{
 "frames": [{
 "duration": 1.0,
+"texture": ExtResource("2_82o86")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_1gqeq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_isvm2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_gr8dl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_axa8o")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_4iqch")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_x3f71")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_ksmwx")
+}],
+"loop": false,
+"name": &"Death",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_55jtl")
 }, {
 "duration": 1.0,
@@ -104,22 +140,25 @@ animations = [{
 "speed": 10.0
 }]
 
-[node name="Enemy" type="Area2D" groups=["Enemies"]]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_55jtl"]
+radius = 4.0
+height = 14.0
+
+[node name="Enemy" type="CharacterBody2D" groups=["Enemies"]]
+scale = Vector2(1.715, 1.715)
 collision_layer = 16
 collision_mask = 19
 script = ExtResource("1_55jtl")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -6)
-shape = SubResource("CapsuleShape2D_3gvst")
+position = Vector2(0, -3)
+shape = SubResource("CircleShape2D_55jtl")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -11)
 scale = Vector2(0.763125, 0.708438)
 sprite_frames = SubResource("SpriteFrames_axa8o")
-animation = &"Run"
-autoplay = "Idle"
-frame_progress = 0.770667
+animation = &"Death"
 flip_h = true
 
 [node name="RayCastLeft" type="RayCast2D" parent="."]
@@ -132,4 +171,12 @@ position = Vector2(0, -6)
 target_position = Vector2(7, 0)
 collision_mask = 2
 
-[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[node name="EnemyHittable" type="Area2D" parent="."]
+collision_layer = 16
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="EnemyHittable"]
+position = Vector2(0, -8)
+scale = Vector2(1.385, 1.385)
+shape = SubResource("CapsuleShape2D_55jtl")
+
+[connection signal="body_entered" from="EnemyHittable" to="." method="_on_area_2d_body_entered"]

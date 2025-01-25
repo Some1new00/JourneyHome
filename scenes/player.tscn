@@ -699,7 +699,6 @@ position = Vector2(0, -7.5)
 shape = SubResource("CapsuleShape2D_bj30b")
 
 [node name="attack" type="AnimatedSprite2D" parent="."]
-visible = false
 position = Vector2(0, -9.5)
 scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFrames_2a33p")
@@ -719,5 +718,3 @@ shape = SubResource("RectangleShape2D_d2wvv")
 [node name="Marker2D" type="Marker2D" parent="attack/Hurtbox/CollisionShape2D"]
 position = Vector2(-23, 9)
 scale = Vector2(2, 2)
-
-[connection signal="area_entered" from="attack/Hurtbox" to="." method="_on_hurtbox_area_entered"]

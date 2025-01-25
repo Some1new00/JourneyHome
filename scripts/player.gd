@@ -12,20 +12,22 @@ var can_doublejump = false
 var possible_todoublejump = false
 var is_attacking = false
 var possibletostartFireball = false
-@onready var attack: AnimatedSprite2D = $attack
-@onready var collision_shape: CollisionShape2D = $attack/Hurtbox/CollisionShape2D
+
 @onready var hurtbox: Area2D = $attack/Hurtbox
-@onready var enemy: Enemy = $"../Enemy"
+
+
+@onready var collision_shape_2d: CollisionShape2D = $attack/Hurtbox/CollisionShape2D
+
+@export var enemy: PackedScene
 @onready var marker_2d: Marker2D = $attack/Hurtbox/CollisionShape2D/Marker2D
+
 @onready var fireball_tscn = preload("res://scenes/fireball.tscn")
 
-#func _ready() -> void:
-	#Globals.KittenPickup.connect(CheckPickup)
+@onready var attack: AnimatedSprite2D = $attack
+
+func _ready() -> void:
+	hurtbox.area_entered.connect(enemyentered_hurtbox)
 	
-#func CheckPickup(KittenData) -> void:
-	#match KittenData.catColor:
-		#catColor.WHITE:
-			
 func startFireball() -> void:
 	if possibletostartFireball == true:
 		var fire = fireball_tscn.instantiate()
@@ -33,7 +35,7 @@ func startFireball() -> void:
 		#fire.firing(velocity.x)
 		owner.add_child(fire)
 		fire.firing()
-		await get_tree().create_timer(1).timeout
+		await get_tree().create_timer(2).timeout
 		startFireball()
 		
 		
@@ -42,9 +44,7 @@ func startAttack() -> void:
 	$attack.play("attack")
 	is_attacking = true
 	
-func _on_hurtbox_area_entered(area: Area2D) -> void:
-	if enemy and is_attacking:
-		enemy.killedThem()
+
 		
 func handle_danger() -> void:
 	#visible = false
@@ -128,4 +128,11 @@ func _physics_process(delta) -> void:
 	turn()
 
 	move_and_slide()
-	
+
+
+func enemyentered_hurtbox(body):
+	var enemy:Enemy = body.get_parent()
+	if enemy and is_attacking:
+		enemy.killedThem()
+	else:
+		print(body.name)
