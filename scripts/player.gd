@@ -19,7 +19,7 @@ var possibletostartFireball = false
 @onready var collision_shape_2d: CollisionShape2D = $attack/Hurtbox/CollisionShape2D
 
 @export var enemy: PackedScene
-@onready var marker_2d: Marker2D = $attack/Hurtbox/CollisionShape2D/Marker2D
+@onready var marker_2d: Marker2D = $attack/Hurtbox/Marker2D
 
 @onready var fireball_tscn = preload("res://scenes/fireball.tscn")
 
@@ -28,6 +28,7 @@ var possibletostartFireball = false
 func _ready() -> void:
 	hurtbox.area_entered.connect(enemyentered_hurtbox)
 	
+		
 func startFireball() -> void:
 	if possibletostartFireball == true:
 		var fire = fireball_tscn.instantiate()
@@ -37,14 +38,15 @@ func startFireball() -> void:
 		fire.firing()
 		await get_tree().create_timer(2).timeout
 		startFireball()
-		
+
+
 		
 func startAttack() -> void:
 	$attack.visible = true
 	$attack.play("attack")
 	is_attacking = true
+	$attack/AnimationPlayer.play("swing")
 	
-
 		
 func handle_danger() -> void:
 	#visible = false
@@ -91,38 +93,30 @@ func _physics_process(delta) -> void:
 	if not can_control: return
 	velocity += get_gravity() * delta
 	#on the ground and have upgrade
-	
 	if Input.is_action_just_pressed("Jump") and is_on_floor() and possible_todoublejump:
 		can_doublejump = true
 		velocity.y = JUMP_VELOCITY
-	
-		
 	#off the ground with the upgrade
 	if Input.is_action_just_pressed("Jump") and !is_on_floor() and can_doublejump:
 		can_doublejump = false  
 		$AnimatedSprite2D.play("Double")
 		velocity.y = JUMP_VELOCITY * 1.2
-		
 	#on the ground without the upgrade
 	elif Input.is_action_just_pressed("Jump") and is_on_floor():
-		#jump_sfx.play()  
-
+		#jump_sfx.play()
 		velocity.y = JUMP_VELOCITY
-	
 	var direction :float= Input.get_axis("Left", "Right")
-	
 	if direction:
-	
 		velocity.x = direction * SPEED
 		if is_on_floor():
 			$AnimatedSprite2D.play("Run")
-		
 	elif not is_on_floor() and velocity.y > 0:
-		
 		$AnimatedSprite2D.play("Fall")
 	elif !is_on_floor() and velocity.y:
 		$AnimatedSprite2D.play("Jump")
-	elif is_on_floor():
+	elif is_on_floor() and is_attacking:
+		$AnimatedSprite2D.play("BasicAttack")
+	else:
 		$AnimatedSprite2D.play("Idle")
 		
 	turn()
@@ -134,5 +128,3 @@ func enemyentered_hurtbox(body):
 	var enemy:Enemy = body.get_parent()
 	if enemy and is_attacking:
 		enemy.killedThem()
-	else:
-		print(body.name)

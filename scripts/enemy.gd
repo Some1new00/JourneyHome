@@ -6,22 +6,30 @@ var direction = 1
 @onready var ray_cast_right: RayCast2D = $RayCastRight
 @onready var player = get_tree().get_first_node_in_group("Player")
 
+@onready var ENEMY = preload("res://scenes/Enemy.tscn")
 
 var deadnpcwalking = false
 
 
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	#startspawning()
 	pass
+	
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
+	
 	if ray_cast_right.is_colliding():
+		var raycastright = ray_cast_right.get_collider()
+		print(raycastright)
 		direction = -1
 		animated_sprite.flip_h = false
+		
 	if ray_cast_left.is_colliding():
 		direction = 1
 		animated_sprite.flip_h = true
+	velocity.y = get_gravity().y
 	velocity.x = direction*speed
 	#self.position.x = direction * speed * delta
 	if deadnpcwalking == false:
@@ -30,25 +38,25 @@ func _physics_process(delta: float) -> void:
 
 		
 func killedThem():
-	#sfx play dead noise
-	speed = 0
-	deadnpcwalking = true
-	$AnimatedSprite2D.stop()
-	$AnimatedSprite2D.play("Death")
-	await get_tree().create_timer(.9).timeout
-	#plus one to the score
-	queue_free()
+	if deadnpcwalking == false:
+		#sfx play dead noise
+		
+		speed = 0
+		deadnpcwalking = true
+		#had to use set deferred to disable because it was trying to disable it while it was queuefreeing
+		$AnimationPlayer.play("Death")
+		$AnimatedSprite2D.stop()
+		$AnimatedSprite2D.play("Death")
+		await get_tree().create_timer(.8).timeout
+		#plus one to the score
+		queue_free()
+		
+	else:
+		return
 
 
-#func startspawning():
-	#var clone = DUPLICATE_USE_INSTANTIATION
-	#clone.position.x = randf_range(-200, 200)
-	#add_child(clone)
 
-
-func _on_area_2d_area_entered(area: Area2D) -> void:
-	print(area.name)
-	if area.name == "Hurtbox": pass
-	elif area.name == "PlayerhurtArea":
+func _on_enemy_hittable_body_entered(body: Node2D) -> void:
+	print(body.name)
+	if body.name=="Player":
 		player.handle_danger()
-	

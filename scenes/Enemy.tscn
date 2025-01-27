@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://dutwcqyj7183v"]
+[gd_scene load_steps=29 format=3 uid="uid://dutwcqyj7183v"]
 
 [ext_resource type="Texture2D" uid="uid://bu4qust617leu" path="res://assets/Enemies/Carrot-sheet.png" id="1_3gvst"]
 [ext_resource type="Script" uid="uid://weawvfnakxs5" path="res://scripts/enemy.gd" id="1_55jtl"]
@@ -10,9 +10,6 @@
 [ext_resource type="Texture2D" uid="uid://ueilg2qnp1w6" path="res://assets/Carrot/Death/Death6.png" id="7_4iqch"]
 [ext_resource type="Texture2D" uid="uid://d21bdemd45w10" path="res://assets/Carrot/Death/Death7.png" id="8_x3f71"]
 [ext_resource type="Texture2D" uid="uid://c04lnkdsf3cnb" path="res://assets/Carrot/Death/Death8.png" id="9_ksmwx"]
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_55jtl"]
-radius = 2.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_55jtl"]
 atlas = ExtResource("1_3gvst")
@@ -144,39 +141,77 @@ animations = [{
 radius = 4.0
 height = 14.0
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_82o86"]
+radius = 4.63104
+height = 15.1561
+
+[sub_resource type="Animation" id="Animation_82o86"]
+resource_name = "Death"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("EnemyHittable/CollisionShape2D2:disabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_1gqeq"]
+length = 0.001
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_isvm2"]
+_data = {
+&"Death": SubResource("Animation_82o86"),
+&"RESET": SubResource("Animation_1gqeq")
+}
+
 [node name="Enemy" type="CharacterBody2D" groups=["Enemies"]]
 scale = Vector2(1.715, 1.715)
 collision_layer = 16
-collision_mask = 19
+collision_mask = 83
 script = ExtResource("1_55jtl")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -3)
-shape = SubResource("CircleShape2D_55jtl")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -11)
 scale = Vector2(0.763125, 0.708438)
 sprite_frames = SubResource("SpriteFrames_axa8o")
 animation = &"Death"
+frame = 1
 flip_h = true
 
 [node name="RayCastLeft" type="RayCast2D" parent="."]
 position = Vector2(0, -6)
-target_position = Vector2(-7, 0)
-collision_mask = 2
+target_position = Vector2(-11.0787, 0.169096)
+collision_mask = 18
 
 [node name="RayCastRight" type="RayCast2D" parent="."]
 position = Vector2(0, -6)
-target_position = Vector2(7, 0)
-collision_mask = 2
+target_position = Vector2(11.6618, 0.169096)
+collision_mask = 18
+collide_with_areas = true
 
-[node name="EnemyHittable" type="Area2D" parent="."]
-collision_layer = 16
-
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="EnemyHittable"]
-position = Vector2(0, -8)
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="."]
+position = Vector2(5.72205e-06, -8.74636)
 scale = Vector2(1.385, 1.385)
 shape = SubResource("CapsuleShape2D_55jtl")
 
-[connection signal="body_entered" from="EnemyHittable" to="." method="_on_area_2d_body_entered"]
+[node name="EnemyHittable" type="Area2D" parent="."]
+collision_layer = 16
+collision_mask = 65
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="EnemyHittable"]
+position = Vector2(1.90735e-06, -8.74635)
+scale = Vector2(1.385, 1.385)
+shape = SubResource("CapsuleShape2D_82o86")
+debug_color = Color(0.498039, 0.0666667, 0.117647, 0.619608)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_isvm2")
+}
+
+[connection signal="body_entered" from="EnemyHittable" to="." method="_on_enemy_hittable_body_entered"]
