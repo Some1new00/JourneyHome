@@ -1,4 +1,4 @@
-class_name White_kitten extends Kitten
+extends Kitten
 
 
 # Called when the node enters the scene tree for the first time.
@@ -11,3 +11,4 @@ func _process(delta: float) -> void:
 	pass
 func give_reward():
 	player.possible_todoublejump = true
+	game.onBasicKitten()

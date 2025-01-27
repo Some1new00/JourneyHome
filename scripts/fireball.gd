@@ -4,7 +4,7 @@ extends Area2D
 
 #@onready var tile_map: TileMapLayer = $TileMapLayer
 var facing:int = 1
-var speed = 111
+var speed = 133
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	$AnimatedSprite2D.play("default")
@@ -12,7 +12,7 @@ func _ready() -> void:
 	
 func _process(delta: float) -> void:
 	self.position += transform.x * speed * delta 
-	await get_tree().create_timer(1).timeout
+	await get_tree().create_timer(2).timeout
 	if self.scale.x <0:
 		$AnimationPlayer.play("RunoutLeft")
 	elif self.scale.x >0:
@@ -28,8 +28,6 @@ func firing() -> void:
 		
 
 func enemy_entered(body):
-	print(body as Enemy)
-	
 	if body as Enemy:
 		var enemy:Enemy = body
 		enemy.killedThem()

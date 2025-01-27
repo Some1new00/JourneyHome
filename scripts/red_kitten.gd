@@ -14,3 +14,4 @@ func _process(delta: float) -> void:
 func give_reward():
 	player.possibletostartFireball = true
 	player.startFireball()
+	game.onRedKitten()

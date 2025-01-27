@@ -1,6 +1,6 @@
 [gd_scene load_steps=56 format=3 uid="uid://dmiith2yrm3nv"]
 
-[ext_resource type="Script" uid="uid://cy5doys4mkja0" path="res://scripts/basic_kitten.gd" id="1_u8p1g"]
+[ext_resource type="Script" uid="uid://bjexlk202db0q" path="res://scripts/white_kitten.gd" id="1_u8p1g"]
 [ext_resource type="Texture2D" uid="uid://dg11v7t2ot4l3" path="res://assets/white_grey_1.png" id="2_a5hoh"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_2mo8n"]

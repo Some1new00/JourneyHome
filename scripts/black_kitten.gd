@@ -11,3 +11,5 @@ func _process(delta: float) -> void:
 	
 func give_reward():
 	player.startAttack()
+	game.onBlackKitten()
+	

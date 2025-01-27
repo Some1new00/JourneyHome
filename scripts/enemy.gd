@@ -22,7 +22,7 @@ func _physics_process(delta: float) -> void:
 	
 	if ray_cast_right.is_colliding():
 		var raycastright = ray_cast_right.get_collider()
-		print(raycastright)
+	
 		direction = -1
 		animated_sprite.flip_h = false
 		
@@ -57,6 +57,6 @@ func killedThem():
 
 
 func _on_enemy_hittable_body_entered(body: Node2D) -> void:
-	print(body.name)
+
 	if body.name=="Player":
 		player.handle_danger()

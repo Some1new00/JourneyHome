@@ -1,6 +1,7 @@
 class_name Player
 extends CharacterBody2D
 @onready var stage_start: Node2D = $"../StageStart"
+@onready var game: Node2D = $"."
 
 @onready var player_sprite: AnimatedSprite2D = $AnimatedSprite2D
 var facing_right = true
@@ -36,7 +37,7 @@ func startFireball() -> void:
 		#fire.firing(velocity.x)
 		owner.add_child(fire)
 		fire.firing()
-		await get_tree().create_timer(2).timeout
+		await get_tree().create_timer(1).timeout
 		startFireball()
 
 
@@ -46,6 +47,7 @@ func startAttack() -> void:
 	$attack.play("attack")
 	is_attacking = true
 	$attack/AnimationPlayer.play("swing")
+	
 	
 		
 func handle_danger() -> void:
@@ -61,7 +63,6 @@ func handle_danger() -> void:
 		var tween = get_tree().create_tween()
 		tween.tween_property(Engine,"time_scale",0.01,.4)
 		await tween.tween_callback(game_over)
-				
 	elif player_death < 4:
 		print(player_death)
 		$AnimatedSprite2D.play("Damaged")

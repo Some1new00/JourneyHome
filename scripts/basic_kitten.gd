@@ -1,7 +1,7 @@
 class_name Kitten extends Area2D
 const POWERS = preload("res://scenes/PowerHotbarIcon.tscn")
 var can_doublejump = false
-
+@onready var game = $"../../"
 @export var cat_icon : Texture2D
 @onready var sprite_2d: AnimatedSprite2D = $Sprite2D
 @onready var player: CharacterBody2D = $"../../Player"
@@ -25,3 +25,4 @@ func _on_body_entered(body: Node2D) -> void:
 	print("OK")
 	Globals.KittenPickup.emit(self)
 	give_reward()
+	
